@@ -240,7 +240,8 @@ function onUpdate(){
 
                 addPostBtn.classList.remove('d-none'); 
                 UpdateBtn.classList.add('d-none');  
-                spinner.classList.add('d-none') 
+                spinner.classList.add('d-none')
+                postForm.reset() 
 
             console.log(res); 
             
