@@ -219,15 +219,33 @@ function onUpdate(){
       if(xhr.status>=200 && xhr.status<=200){ 
        let res = xhr.response; 
            let col= document.getElementById(updateId); 
-            let h3= col.querySelector('.card-header h3')
-               h3.innerText= updateObj.title;
+            // let h3= col.querySelector('.card-header h3')
+            //    h3.innerText= updateObj.title;
            
-            let p= col.querySelector('.card-header p')
-                p.innerText= updateObj.body;   
+            // let p= col.querySelector('.card-body p')
+            //     p.innerText= updateObj.body; 
+                
+            col.innerHTML = `<div class="card">
+                                 <div class="card-header">
+                                 <H3>${updateObj.title} </H3>                           
+                                  </div>
+                                   <div class="card-body">
+                                     ${updateObj.body}
+                                    </div>
+                                 <div class="card-footer d-flex justify-content-between">
+                                  <button onClick="onEdit(this)" class="btn btn-inline-block btn-outline-primary">Edit</button>
+                                  <button onClick="onRemove(this)" class="btn btn-inline-block btn-outline-danger">Delete</button>
+                                 </div>
+                                </div>`
+
+                addPostBtn.classList.remove('d-none'); 
+                UpdateBtn.classList.add('d-none');  
+                spinner.classList.add('d-none') 
 
             console.log(res); 
             
        }else{  
+             
            spinner.classList.add('d-none');   
        }
     }
@@ -237,4 +255,4 @@ function onUpdate(){
 
 
 postForm.addEventListener('submit', onPostSubmit)
- 
+UpdateBtn.addEventListener('click', onUpdate)
