@@ -7,7 +7,9 @@
 
 
 
-
+.highlight{
+     border: 4px solid purple;
+}
 
 
 .card-header h3{  
@@ -20,7 +22,6 @@
  .spinner{
      top: 0;
      left: 0;
-    
      background-color: rgb(255,255,255,0.66);
      height: 100%;
      width: 100%;

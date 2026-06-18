@@ -9,31 +9,24 @@ const userIdControl= document.getElementById('userId');
 const addPostBtn = document.getElementById('addPost');
 const postContainer =document.getElementById('postContainer');
 const UpdateBtn =document.getElementById('UpdateBtn');
-
-
 const spinner = document.getElementById('spinner');
 
-
 let postArr= []
-
-
 function snackbar(msg,icon){ 
             swal.fire({ 
                  title:msg,
                  icon:icon,
-                 timer:3000
+                 timer:2000
             })
         }
-
-
 
 function createCard(arr){ 
       let result = '  '; 
 
         arr.forEach(ele=>{ 
-                    result +=`<div class="col-md-4" id="${ele.id}">
-                                <div class="card">
-                                 <div class="card-header">
+                    result +=`<div class="col-md-4 my-4" id="${ele.id}">
+                                <div class="card h-100">
+                                 <div class="card-header" data-toggle="tooltip" data-placement="top" title="${ele.title}">
                                  <H3>${ele.title} </H3>                           
                                   </div>
                                    <div class="card-body">
@@ -49,34 +42,27 @@ function createCard(arr){
        postContainer.innerHTML = result ;
 }
 
-
-
-
-
-
-
-
 function fetchPosts(){
-
+  spinner.classList.remove('d-none');
         let xhr=  new XMLHttpRequest(); 
-         
-
          xhr.open('GET',post_url,true); 
-
          xhr.send(null); 
 
          xhr.onload= function (){ 
-            //  console.log(xhr.response);
              console.log(xhr.status);
             
           if(xhr.status>=200 &&  xhr.status<=299){ 
              postArr  =JSON.parse(xhr.response) ;
                    
-               createCard(postArr);   
+               createCard(postArr);
+               $(function () {
+                 $('[data-toggle="tooltip"]').tooltip()
+                })   
              
           }else{ 
             console.log('api is failed...!')   
             }
+            spinner.classList.add('d-none');
             
         } 
 }
@@ -87,18 +73,13 @@ fetchPosts();
 
 
 function onPostSubmit(eve){ 
-    
-   
-
     eve.preventDefault(); 
-
+spinner.classList.remove('d-none');
  let postObj = { 
            title:titleControl.value ,
            body:bodyControl.value,
            userId: userIdControl.value        
         }
-  
-        
        let xhr= new XMLHttpRequest() ; 
           
        xhr.open('POST', post_url);
@@ -113,7 +94,7 @@ function onPostSubmit(eve){
                col.className  = 'col-md-4 mb-3'; 
                col.id         = resp.id;
                col.innerHTML  = ` <div class="card">
-                                 <div class="card-header">
+                                 <div class="card-header" data-toggle="tooltip" data-placement="top" title="${postObj.title}">
                                  <H3>${postObj.title} </H3>                           
                                   </div>
                                    <div class="card-body">
@@ -126,39 +107,52 @@ function onPostSubmit(eve){
                                 </div>` 
 
              let postContainer = document.getElementById('postContainer');
-                 postContainer.prepend(col);        
+                 postContainer.prepend(col);
+                 $(function () {
+                     $('[data-toggle="tooltip"]').tooltip()
+                  })        
             
             
             }else{ 
                    snackbar('New post is not created', 'error');   
                  }
-            } 
-
-
-        //  xhr.onerror = function (){  }   
-
+                 spinner.classList.add('d-none');
+            }   
       } 
       
 function onRemove(ele){ 
-     let removeId =  ele.closest('.col-md-4').id ;
-     let removeUrl=  `${base_url}/posts/${removeId}`
-
-     let xhr= new XMLHttpRequest(); 
-         xhr.open('DELETE', removeUrl);
-         xhr.send(null);
-         
-         xhr.onload = function(){ 
-             if(xhr.status>=200 && xhr.status<=299){ 
-               ele.closest('.col-md-4').remove();
-             }else{
-                snackbar('Not  deleted','error')
-             } 
-         }
+  Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+        if (result.isConfirmed) {
+            spinner.classList.remove('d-none');
+          let removeId =  ele.closest('.col-md-4').id ;
+          let removeUrl=  `${base_url}/posts/${removeId}`
+          let xhr= new XMLHttpRequest(); 
+              xhr.open('DELETE', removeUrl);
+              xhr.send(null);
+              
+              xhr.onload = function(){ 
+                  if(xhr.status>=200 && xhr.status<=299){ 
+                    ele.closest('.col-md-4').remove();
+                    snackbar(`The post with id ${removeId} is remove successfully`, 'success')
+                    
+                  }else{
+                      snackbar('Not  deleted','error')
+                  } 
+                  spinner.classList.add('d-none');
+                } 
+        }
+   }); 
+     
       
-      } 
-
-
-
+} 
 
 function onEdit(ele){ 
     let editId= ele.closest('.col-md-4').id ;
@@ -172,7 +166,6 @@ function onEdit(ele){
 
         xhr.setRequestHeader('content-type', 'application/json') ;
         xhr.setRequestHeader('Autho','Get token from');
-
         xhr.send(null);
         
         xhr.onload =function (){ 
@@ -187,14 +180,16 @@ function onEdit(ele){
                 addPostBtn.classList.add('d-none'); 
                 UpdateBtn.classList.remove('d-none');  
                 spinner.classList.add('d-none')
+              postform.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start'
+              });
               }else{ 
                  snackbar('Data is not patched', 'error');
                 spinner.classList.add('d-none')
 
               }
         } 
-
-
 }
 
 function onUpdate(){ 
@@ -225,8 +220,8 @@ function onUpdate(){
             // let p= col.querySelector('.card-body p')
             //     p.innerText= updateObj.body; 
                 
-            col.innerHTML = `<div class="card">
-                                 <div class="card-header">
+            col.innerHTML = `<div class="card h-100">
+                                 <div class="card-header" data-toggle="tooltip" data-placement="top" title="${updateObj.title}">
                                  <H3>${updateObj.title} </H3>                           
                                   </div>
                                    <div class="card-body">
@@ -242,6 +237,16 @@ function onUpdate(){
                 UpdateBtn.classList.add('d-none');  
                 spinner.classList.add('d-none')
                 postForm.reset() 
+                 col.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                  });
+
+    col.classList.add('highlight');
+
+    setTimeout(() => {
+        col.classList.remove('highlight');
+    }, 4000);
 
             console.log(res); 
             
@@ -253,7 +258,6 @@ function onUpdate(){
   
 
 }
-
 
 postForm.addEventListener('submit', onPostSubmit)
 UpdateBtn.addEventListener('click', onUpdate)
