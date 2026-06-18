@@ -220,7 +220,7 @@ function onUpdate(){
             // let p= col.querySelector('.card-body p')
             //     p.innerText= updateObj.body; 
                 
-            col.innerHTML = `<div class="card">
+            col.innerHTML = `<div class="card h-100">
                                  <div class="card-header" data-toggle="tooltip" data-placement="top" title="${updateObj.title}">
                                  <H3>${updateObj.title} </H3>                           
                                   </div>
