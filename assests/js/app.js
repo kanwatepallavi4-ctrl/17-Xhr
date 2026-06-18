@@ -60,17 +60,13 @@ function fetchPosts(){
                 })   
              
           }else{ 
-            console.log('api is failed...!')   
-            }
+            snackbar('api is failed...!', 'error')   
+          }
             spinner.classList.add('d-none');
             
         } 
 }
-
 fetchPosts();
-
-
-
 
 function onPostSubmit(eve){ 
     eve.preventDefault(); 
@@ -111,8 +107,6 @@ spinner.classList.remove('d-none');
                  $(function () {
                      $('[data-toggle="tooltip"]').tooltip()
                   })        
-            
-            
             }else{ 
                    snackbar('New post is not created', 'error');   
                  }
@@ -156,8 +150,7 @@ function onRemove(ele){
 
 function onEdit(ele){ 
     let editId= ele.closest('.col-md-4').id ;
-    localStorage.setItem('EditId', editId);      
-    // let editObj = postArr.find(post =>post) 
+    localStorage.setItem('EditId', editId); 
     let Edit_url = `${base_url}/posts/${editId}`;
     
     spinner.classList.remove('d-none');
@@ -197,9 +190,9 @@ function onUpdate(){
     let updateUrl=`${base_url}/posts/${updateId}` 
     
     let updateObj= { 
-        title:titleControl.value ,
-        body:bodyControl.value ,
-        userId:updateId
+         title:titleControl.value ,
+          body:bodyControl.value,
+          userId: userIdControl.value
     }
     
     spinner.classList.remove('d-none')
@@ -214,11 +207,6 @@ function onUpdate(){
       if(xhr.status>=200 && xhr.status<=200){ 
        let res = xhr.response; 
            let col= document.getElementById(updateId); 
-            // let h3= col.querySelector('.card-header h3')
-            //    h3.innerText= updateObj.title;
-           
-            // let p= col.querySelector('.card-body p')
-            //     p.innerText= updateObj.body; 
                 
             col.innerHTML = `<div class="card h-100">
                                  <div class="card-header" data-toggle="tooltip" data-placement="top" title="${updateObj.title}">
@@ -247,17 +235,13 @@ function onUpdate(){
 
     setTimeout(() => {
         col.classList.remove('highlight');
-    }, 4000);
-
-            console.log(res); 
+    }, 4000); 
             
-       }else{  
+      }else{  
              snackbar('updated is failed', 'error')
            spinner.classList.add('d-none');   
-       }
+      }
     }
-  
-
 }
 
 postForm.addEventListener('submit', onPostSubmit)
