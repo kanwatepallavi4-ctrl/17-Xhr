@@ -91,9 +91,9 @@ spinner.classList.remove('d-none');
               postForm.reset();
          
            let col=document.createElement('div');
-               col.className  = 'col-md-4 mb-3'; 
+               col.className  = 'col-md-4 my-4'; 
                col.id         = resp.id;
-               col.innerHTML  = ` <div class="card">
+               col.innerHTML  = ` <div class="card h-100">
                                  <div class="card-header" data-toggle="tooltip" data-placement="top" title="${postObj.title}">
                                  <H3>${postObj.title} </H3>                           
                                   </div>
@@ -220,7 +220,7 @@ function onUpdate(){
             // let p= col.querySelector('.card-body p')
             //     p.innerText= updateObj.body; 
                 
-            col.innerHTML = `<div class="card h-100">
+            col.innerHTML = `<div class="card">
                                  <div class="card-header" data-toggle="tooltip" data-placement="top" title="${updateObj.title}">
                                  <H3>${updateObj.title} </H3>                           
                                   </div>
@@ -237,6 +237,7 @@ function onUpdate(){
                 UpdateBtn.classList.add('d-none');  
                 spinner.classList.add('d-none')
                 postForm.reset() 
+                snackbar( 'updated successfully', 'success')
                  col.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
@@ -251,7 +252,7 @@ function onUpdate(){
             console.log(res); 
             
        }else{  
-             
+             snackbar('updated is failed', 'error')
            spinner.classList.add('d-none');   
        }
     }
